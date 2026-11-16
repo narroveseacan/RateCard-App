@@ -1,0 +1,12 @@
+<!-- @dsCard group="Display" height=240 -->
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0}
+.th{padding:24px;background:var(--bg);display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+</style></head><body>
+<div id="root"></div>
+<script>
+var P=window.Perbekasian,h=React.createElement;
+function Both(){return h('div',null,['dark','light'].map(function(t){return h('div',{key:t,className:'th','data-theme':t},h(P.Chip,{n:1,title:'Penghuni',sub:'lapis pertama'}),h(P.Chip,{n:4,title:'Kaitan',sub:'Juli - September 2009'}),h(P.Chip,{title:'Tanpa nomor'}))}))}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Both,null));
+</script></body></html>

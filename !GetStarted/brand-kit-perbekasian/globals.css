@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* Tema gelap = bawaan merek. Tema terang = [data-theme="light"] pada <html>. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme static {
+  /* Merek (sama di kedua tema) */
+  --color-ink: #1e1a3c;
+  --color-ink-deep: #14122e;
+  --color-cyan: #59c3c3;
+  --color-grape: #52489c;
+  --color-platinum: #ebebeb;
+  --color-ash: #cad2c5;
+  --color-teal: #84a98c;
+  --color-accent: #f2c96b;
+
+  /* Semantik UI (tema gelap; tema terang menimpa di bawah) */
+  --color-bg: #14122e;
+  --color-surface: #1e1a3c;
+  --color-surface-2: #2a2552;
+  --color-border: #3a3470;
+  --color-border-strong: #7a73b8;
+  --color-text: #ebebeb;
+  --color-text-muted: #cad2c5;
+  --color-primary: #59c3c3;
+  --color-primary-hover: #7fd4d4;
+  --color-primary-text: #1e1a3c;
+  --color-link: #59c3c3;
+  --color-secondary: #52489c;
+  --color-secondary-text: #ebebeb;
+  --color-focus: #59c3c3;
+  --color-success: #84a98c;
+  --color-warning: #f2c96b;
+  --color-danger: #f28b82;
+
+  --font-sans: var(--font-pjs, "Plus Jakarta Sans"), system-ui, sans-serif;
+  --font-serif: var(--font-spectral, Spectral), Georgia, serif;
+
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-xl: 44px;
+
+  --shadow-sm: none;
+  --shadow-md: 0 8px 24px #00000066;
+}
+
+[data-theme="light"] {
+  --color-bg: #f6f6fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #eceaf5;
+  --color-border: #d9d6e8;
+  --color-border-strong: #7a759c;
+  --color-text: #1e1a3c;
+  --color-text-muted: #5b5680;
+  --color-primary: #59c3c3;
+  --color-primary-hover: #47b0b0;
+  --color-primary-text: #1e1a3c;
+  --color-link: #1b6f6f;
+  --color-secondary: #52489c;
+  --color-secondary-text: #ffffff;
+  --color-focus: #1b6f6f;
+  --color-success: #2f6b4a;
+  --color-warning: #8a5d00;
+  --color-danger: #b3261e;
+  --shadow-sm: 0 1px 2px #1e1a3c14;
+  --shadow-md: 0 8px 24px #1e1a3c1f;
+}
+
+/* Gaya huruf web (pakai: class="text-display", "text-h1", ...) */
+@utility text-display { font-size: 48px; line-height: 52px; font-weight: 800; letter-spacing: -0.03em; }
+@utility text-h1 { font-size: 36px; line-height: 42px; font-weight: 800; letter-spacing: -0.025em; }
+@utility text-h2 { font-size: 28px; line-height: 34px; font-weight: 800; letter-spacing: -0.02em; }
+@utility text-h3 { font-size: 22px; line-height: 30px; font-weight: 700; letter-spacing: -0.01em; }
+@utility text-label { font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+@utility text-quote { font-family: var(--font-serif); font-style: italic; font-size: 22px; line-height: 32px; font-weight: 400; }
+
+@layer base {
+  html { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); font-weight: 500; }
+  body { font-size: 16px; line-height: 26px; -webkit-font-smoothing: antialiased; }
+  :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { *, ::before, ::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+}

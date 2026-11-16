@@ -1,0 +1,12 @@
+<!-- @dsCard group="Forms" height=380 -->
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0}
+.th{padding:24px;background:var(--bg);display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+</style></head><body>
+<div id="root"></div>
+<script>
+var P=window.Perbekasian,h=React.createElement;
+function Both(){return h('div',null,['dark','light'].map(function(t){return h('div',{key:t,className:'th','data-theme':t},h('div',{style:{width:300}},h(P.Input,{label:'Nama',placeholder:'Nama lengkap',hint:'Seperti di KTP.'})),h('div',{style:{width:300}},h(P.Input,{label:'Surel',defaultValue:'abc',error:'Alamat surel belum lengkap. Tambahkan @ dan domain.'})))}))}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Both,null));
+</script></body></html>

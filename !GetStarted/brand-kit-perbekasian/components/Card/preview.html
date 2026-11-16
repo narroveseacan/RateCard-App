@@ -1,0 +1,12 @@
+<!-- @dsCard group="Display" height=360 -->
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0}
+.th{padding:24px;background:var(--bg);display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+</style></head><body>
+<div id="root"></div>
+<script>
+var P=window.Perbekasian,h=React.createElement;
+function Both(){return h('div',null,['dark','light'].map(function(t){return h('div',{key:t,className:'th','data-theme':t},h('div',{style:{maxWidth:420}},h(P.Card,{eyebrow:'Bedah Bekasi',title:'Rumah D12, Jatiasih'},'Satu kasus dibelah lapis demi lapis. Sumber ada di caption.')))}))}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Both,null));
+</script></body></html>

@@ -1,0 +1,206 @@
+// Perbekasian Web Platform — data model (PRD §7, diperluas sesuai Rate Card 2026 PDF)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model TikTokIntegration {
+  id                    String    @id @default(cuid())
+  openId                String    @unique
+  unionId               String?
+  displayName           String
+  avatarUrl             String?
+  accessTokenEncrypted  String
+  refreshTokenEncrypted String
+  scopes                String // "user.info.basic,video.list"
+  accessTokenExpiresAt  DateTime
+  refreshTokenExpiresAt DateTime
+  lastSyncedAt          DateTime  @default(now())
+  lastError             String?
+  revokedAt             DateTime?
+  updatedAt             DateTime  @updatedAt
+}
+
+enum SyncStatus {
+  SUCCESS
+  PARTIAL
+  FAILED
+  SKIPPED
+}
+
+model SyncLog {
+  id             String     @id @default(cuid())
+  trigger        String // "cron" | "manual" | "cover-fallback"
+  status         SyncStatus
+  tokenRefreshed Boolean    @default(false)
+  videosUpdated  Int        @default(0)
+  message        String?
+  createdAt      DateTime   @default(now())
+
+  @@index([createdAt])
+}
+
+model AccountMetricSnapshot {
+  id                  String   @id @default(cuid())
+  periodLabel         String // e.g., "±30 hari terakhir"
+  totalViewsLabel     String // e.g., "719rb"
+  igViews             Int
+  tiktokViews         Int
+  igReach             Int
+  igInteractions      Int      @default(0)
+  igProfileVisits     Int      @default(0)
+  igEngagementRate    Float // e.g., 7.4
+  tiktokEngagement    Float // e.g., 6.6
+  tiktokUniqueViewers Int      @default(0)
+  tiktokLikes         Int      @default(0)
+  tiktokShares        Int      @default(0)
+  igFollowers         Int
+  tiktokFollowers     Int
+  audienceAge25To44   Float // e.g., 74.0
+  audienceIndonesia   Float // e.g., 99.3
+  igMalePct           Float    @default(60)
+  tiktokMalePct       Float    @default(79)
+  igAgeJson           Json? // [{ range: "18–24", pct: 8.3 }, ...]
+  tiktokAgeJson       Json?
+  methodologyNote     String?
+  introPriceValidTo   DateTime // e.g., 2027-01-31
+  isActive            Boolean  @default(true)
+  updatedAt           DateTime @updatedAt
+}
+
+model SiteSetting {
+  id            String   @id @default("singleton")
+  businessWa    String?
+  businessEmail String?
+  instagramUrl  String?
+  tiktokUrl     String?
+  updatedAt     DateTime @updatedAt
+}
+
+model ContentSeries {
+  id          String    @id @default(cuid())
+  slug        String    @unique // "bedah-bekasi", "kata-netizen", "jika-bekasi-ada"
+  title       String
+  tagline     String?
+  description String
+  sortOrder   Int       @default(0)
+  episodes    Episode[]
+}
+
+model Episode {
+  id                  String             @id @default(cuid())
+  seriesId            String
+  series              ContentSeries      @relation(fields: [seriesId], references: [id])
+  episodeCode         String // e.g., "EP-07"
+  title               String
+  slug                String             @unique
+  summary             String
+  factSources         String? // Satu sumber per baris: "Label | https://..."
+  tiktokVideoId       String?            @unique
+  tiktokCoverUrl      String?
+  tiktokEmbedLink     String?
+  tiktokDurationSec   Int?
+  coverLastRefreshed  DateTime?
+  igReelsUrl          String?
+  highlightViewsLabel String? // e.g., "344rb views"
+  isFeaturedCaseStudy Boolean            @default(false)
+  isPublished         Boolean            @default(true)
+  pageViews           Int                @default(0)
+  publishedAt         DateTime           @default(now())
+  affiliateProducts   AffiliateProduct[]
+
+  @@index([seriesId, publishedAt])
+}
+
+model AffiliateProduct {
+  id           String   @id @default(cuid())
+  episodeId    String
+  episode      Episode  @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  productName  String
+  category     String?
+  platform     String // "Shopee", "Tokopedia", "TikTok Shop"
+  affiliateUrl String
+  ctaText      String
+  clickCount   Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+enum ServiceCategory {
+  ENDORSE
+  PAID_PROMOTE
+  BUNDLE
+  ADDON
+}
+
+enum PricingType {
+  FIXED // basePriceIdr per unit
+  PERCENT // percentOfContent (%) dari subtotal konten
+}
+
+model RateCardService {
+  id                String          @id @default(cuid())
+  code              String          @unique
+  category          ServiceCategory
+  name              String
+  description       String
+  deliverables      String[]
+  basePriceIdr      Int
+  compareAtPriceIdr Int? // harga coret paket (jumlah item asli)
+  pricingType       PricingType     @default(FIXED)
+  percentOfContent  Int? // add-on persen: 50 = +50%
+  unitLabel         String // e.g., "per video", "per frame"
+  badge             String?
+  sortOrder         Int             @default(0)
+  isActive          Boolean         @default(true)
+}
+
+enum PaymentScheme {
+  FULL_UPFRONT // < Rp 500.000
+  DP_50_SPLIT // >= Rp 500.000
+}
+
+enum InquiryStatus {
+  SUBMITTED
+  IN_DISCUSSION
+  APPROVED
+  REJECTED
+}
+
+model BookingInquiry {
+  id                String        @id @default(cuid())
+  referenceCode     String        @unique
+  brandName         String
+  brandIndustry     String
+  picName           String
+  picContact        String
+  contactChannel    String        @default("whatsapp") // "whatsapp" | "email"
+  selectedItemsJson Json // Array of { serviceId, code, name, qty, unitPrice, lineTotal }
+  isRetainer3Months Boolean       @default(false)
+  subtotalIdr       Int // subtotal kontrak (sebelum diskon)
+  discountIdr       Int
+  totalEstimateIdr  Int
+  paymentScheme     PaymentScheme
+  briefSummary      String
+  targetPublishDate DateTime?
+  policyAccepted    Boolean
+  status            InquiryStatus @default(SUBMITTED)
+  adminNote         String?
+  createdAt         DateTime      @default(now())
+
+  @@index([createdAt])
+}

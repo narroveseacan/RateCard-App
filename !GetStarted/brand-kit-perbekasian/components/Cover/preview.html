@@ -1,0 +1,37 @@
+<!-- @dsCard height=288 -->
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:var(--ink)}
+svg{display:block;width:960px;height:288px}
+.ground{fill:var(--ink)}
+.slab{fill:var(--grape);rx:var(--radius-md)}
+.sig{fill:var(--cyan);rx:var(--radius-md)}
+.pale{fill:var(--platinum);rx:var(--radius-md)}
+.moss{fill:var(--teal);rx:var(--radius-md)}
+.dot{fill:var(--cyan)}
+.ring{fill:none;stroke:var(--ink);stroke-width:8}
+.name{font-family:var(--font-sans);font-weight:800;font-size:64px;letter-spacing:-0.03em;fill:var(--platinum)}
+.tag{font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:14px;fill:var(--ash)}
+</style></head><body>
+<svg viewBox="0 0 960 288" xmlns="http://www.w3.org/2000/svg">
+<!-- Derivation
+blocks: grape 224x288 slab (x496), cyan 224x168 bleeding top-right (x736), platinum 136x104 and teal 72x104 below the cyan; ground ink.
+arrangement: one tall slab with satellites; cyan, the brand's only speaking colour, takes the top-right corner.
+pattern: discs (numbered-chip motif) in a 3x4 grid at pitch 56 on the slab plus one ring on the cyan block (the map radius ring) - the brand's chips and map pins are circles, so discs and a ring say Perbekasian.
+steps/radii: radius 20 (md) on all blocks, discs r16 (half of 32), pitch 56.
+-->
+<rect class="ground" width="960" height="288"/>
+<rect class="slab" x="496" y="0" width="224" height="288"/>
+<rect class="sig" x="736" y="0" width="224" height="168"/>
+<rect class="pale" x="736" y="184" width="136" height="104"/>
+<rect class="moss" x="888" y="184" width="72" height="104"/>
+<g class="dot">
+<circle cx="552" cy="48" r="16"/><circle cx="608" cy="48" r="16"/><circle cx="664" cy="48" r="16"/>
+<circle cx="552" cy="104" r="16"/><circle cx="608" cy="104" r="16"/><circle cx="664" cy="104" r="16"/>
+<circle cx="552" cy="160" r="16"/><circle cx="608" cy="160" r="16"/><circle cx="664" cy="160" r="16"/>
+<circle cx="552" cy="216" r="16"/><circle cx="608" cy="216" r="16"/><circle cx="664" cy="216" r="16"/>
+</g>
+<circle class="ring" cx="848" cy="84" r="52"/>
+<text class="name" x="48" y="222">Perbekasian</text>
+<text class="tag" x="48" y="252">Fakta unik Bekasi, versi 3D.</text>
+</svg>
+</body></html>
